@@ -55,6 +55,7 @@ std::string vignette = "";
 std::string gammaCalib = "";
 std::string source = "";
 std::string calib = "";
+std::string resultfile = "";
 double rescale = 1;
 bool reverse = false;
 bool disableROS = false;
@@ -346,6 +347,13 @@ void parseArgument(char* arg)
 		return;
 	}
 
+	if(1==sscanf(arg,"result=%s",buf))
+	{
+		resultfile = buf;
+		printf("trajectory will be wrote to %s!\n", resultfile.c_str());
+		return;
+	}
+
 	printf("could not parse argument \"%s\"!!!!\n", arg);
 }
 
@@ -531,7 +539,8 @@ int main( int argc, char** argv )
         gettimeofday(&tv_end, NULL);
 
 
-        fullSystem->printResult("result.txt");
+        std::cout << "print result: " << resultfile << std::endl;
+        fullSystem->printResult(resultfile);
 
 
         int numFramesProcessed = abs(idsToPlay[0]-idsToPlay.back());
@@ -561,6 +570,7 @@ int main( int argc, char** argv )
             tmlog.close();
         }
 
+		viewer->close();
     });
 
 
